@@ -1,5 +1,5 @@
 import scrapy
-
+from ..items import ImdbItem
 
 class QuotesSpider(scrapy.Spider):
     name = "quotes"
@@ -8,20 +8,17 @@ class QuotesSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
+        items = ImdbItem()
         all_div_quotes = response.css("div.quote")
-        quotes = all_div_quotes.css("span.text::text").extract()
-        authors = all_div_quotes.css(".author::text").extract()
-        for div_quote in all_div_quotes:
-            quote = div_quote.css("span.text::text").extract()
-            author = div_quote.css(".author::text").extract()
-            yield {
-            "quote" : quote,
-            "author" : author,
-            }
-
         
-        yield {
-            "quotes" : quotes,
-            "authors" : authors,
-            }
+        for quote_div in all_div_quotes:
+
+            quote = quote_div.css("span.text::text").extract()
+            author = quote_div.css(".author::text").extract()
+
+
+            items['quote'] = quote
+            items['author'] = author
+
+            yield items
 
