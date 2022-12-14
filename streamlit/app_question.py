@@ -102,34 +102,3 @@ duree_par_genre = st.selectbox(
 
 if st.button("valider le genre"):
     st.markdown(f"La duree moyennne des films du genre {duree_par_genre} est {round(dict_temps_genre[duree_par_genre],2)} min ")
-
-
-st.markdown("# Recherche")
-genre_selectbox = st.selectbox(
-    'Choisi un genre de film :',
-    liste_genre)
-
-
-if st.button("Selectionner le genre"):
-    df= pd.DataFrame(list(db_movies.find({"genre":genre_selectbox})))
-    df.drop(columns="_id",inplace=True)
-    st.markdown(f"### Voici les films avec pour genre {genre_selectbox} :")
-    st.dataframe(df)
-    
-
-
-
-acteur_selectbox = st.multiselect(
-    'Choisi un acteur :',
-    liste_acteur)
-
-if st.button("Selectionner l'acteur"):
-    df= pd.DataFrame(list(db_movies.find({"acteurs":{"$in":acteur_selectbox}})))
-    df.drop(columns="_id",inplace=True)
-    st.markdown(f"### Voici les films avec l'acteur ou les acteurs {acteur_selectbox} :")
-    st.dataframe(df)
-
-
-
-
-
