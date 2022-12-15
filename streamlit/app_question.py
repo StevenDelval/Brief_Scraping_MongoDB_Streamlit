@@ -4,11 +4,8 @@ import pandas as pd
 
 ## connection Mongodb
 client = MongoClient("localhost:27017")
-database = client.scrapy
+database = client.scrapyPipeline
 db_movies = database.movies
-db_serie = database.serie
-
-
 
 ## Creation des liste d'acteur et de genre de film
 liste_genre =[]

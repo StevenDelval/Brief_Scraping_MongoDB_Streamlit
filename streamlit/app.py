@@ -8,7 +8,7 @@ def mise_en_forme(curseur):
     fonction qui met en forme les elements d'un cureseur mongodb
     """
     ## Class css
-    css_com= "border: solid black 1px;border-radius:30px;margin:0 0 20px 0;padding: 0 15px;"
+    css_com= "border: dashed black 1px;border-radius:30px;margin:0 0 20px 0;padding: 0 15px;"
     flex =  f"{css_com} display : flex;flex-flow: row;"
     flex_reverse = f"{css_com} display : flex;flex-flow: row-reverse; "
     flex_column= "display:flex; flex-flow: column;"
@@ -50,9 +50,8 @@ def mise_en_forme(curseur):
 
 ## connection Mongodb
 client = MongoClient("localhost:27017")
-database = client.scrapy
+database = client.scrapyPipeline
 db_movies = database.movies
-db_serie = database.serie
 
 
 
@@ -124,25 +123,25 @@ if st.sidebar.button("Selectionner l'acteur"):
             if acteur_df:
                 df= pd.DataFrame(list(db_movies.find({"acteurs":{"$in":acteur_selectbox}})))
                 df.drop(columns="_id",inplace=True)
-                st.markdown(f"### Voici les films avec l'acteur ou les acteurs {acteur_selectbox} :")
+                st.markdown(f"### Voici les films avec l'acteur ou les acteurs {' , '.join(acteur_selectbox)} :")
                 st.dataframe(df)
             else:
-                st.markdown(f"### Voici les films avec l'acteur ou les acteurs {acteur_selectbox} :")
+                st.markdown(f"### Voici les films avec l'acteur ou les acteurs {' , '.join(acteur_selectbox)} :")
                 mise_en_forme(db_movies.find({"acteurs":{"$in":acteur_selectbox}}))
         except:
-            st.markdown(f"### Il n'y a pas de films avec l'acteur ou les acteurs {acteur_selectbox} :")
+            st.markdown(f"### Il n'y a pas de films avec l'acteur ou les acteurs {' , '.join(acteur_selectbox)} :")
     else:
         try :
             if acteur_df:
                 df= pd.DataFrame(list(db_movies.find({"acteurs":{"$all":acteur_selectbox}})))
                 df.drop(columns="_id",inplace=True)
-                st.markdown(f"### Voici les films avec les acteurs {acteur_selectbox} dans le même film :")
+                st.markdown(f"### Voici les films avec les acteurs {' , '.join(acteur_selectbox)} dans le même film :")
                 st.dataframe(df)
             else:
-                st.markdown(f"### Voici les films avec l'acteur ou les acteurs {acteur_selectbox} :")
+                st.markdown(f"### Voici les films avec l'acteur ou les acteurs {' , '.join(acteur_selectbox)} :")
                 mise_en_forme(db_movies.find({"acteurs":{"$all":acteur_selectbox}}))
         except:
-            st.markdown(f"### Il n'y a pas de films avec l'acteur ou les acteurs {acteur_selectbox} :")
+            st.markdown(f"### Il n'y a pas de films avec l'acteur ou les acteurs {' , '.join(acteur_selectbox)} :")
 
 
 sup_note = st.sidebar.slider('Selectionner une note superieur à:',value=0.0,max_value=10.,min_value=0.,step=0.1,format="%.2f",key="sup_note")
