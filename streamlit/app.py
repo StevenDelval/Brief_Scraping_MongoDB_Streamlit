@@ -172,7 +172,7 @@ if st.sidebar.button("Selectionner par duree"):
             st.markdown(f"### Voici les films dont la note est superieur à {sup_duree} et inferieur à {inf_duree} :")
             st.dataframe(df)
         else:
-            st.markdown(f"### Voici les films dont la note est superieur à {sup_duree} et inferieur à {inf_duree} :")
+            st.markdown(f"### Voici les films dont la duree est superieur à {sup_duree} et inferieur à {inf_duree} min:")
             mise_en_forme(db_movies.find({"duree":{"$gte":sup_duree,"$lte":inf_duree}}))
     except:
-        st.markdown(f"### Il n'y a pas de film dont la note est superieur à {sup_duree} et inferieur à {inf_duree} :")
+        st.markdown(f"### Il n'y a pas de film dont la duree est superieur à {sup_duree} et inferieur à {inf_duree} min")
