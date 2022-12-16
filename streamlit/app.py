@@ -122,7 +122,7 @@ with tab1:
     for i in top_100:
         if "France" in i['pays']  :
             france += 1
-        elif "United States" in i['pays'] :
+        if "United States" in i['pays'] :
             us += 1
     dict_mean = {"France":france,"United States":us,"Autre":100-france-us}
     fig= plt.figure()
