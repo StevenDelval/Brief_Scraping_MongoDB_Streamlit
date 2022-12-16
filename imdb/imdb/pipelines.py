@@ -18,3 +18,14 @@ class ImdbPipeline:
     def process_item(self, item, spider):
         self.movies.insert_one(dict(item))
         return item
+
+class ImdbSeriePipeline:
+
+    def __init__(self):
+        self.conn = MongoClient("localhost:27017")
+        db = self.conn.scrapyPipeline
+        self.serie = db.serie
+
+    def process_item(self, item, spider):
+        self.serie.insert_one(dict(item))
+        return item
