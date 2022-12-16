@@ -1,14 +1,12 @@
 import streamlit as st
 from pymongo import MongoClient
 import pandas as pd
+import matplotlib.pyplot as plt
 
 ## connection Mongodb
 client = MongoClient("localhost:27017")
-database = client.scrapy
+database = client.scrapyPipeline
 db_movies = database.movies
-db_serie = database.serie
-
-
 
 ## Creation des liste d'acteur et de genre de film
 liste_genre =[]
@@ -35,6 +33,7 @@ df.drop(columns="_id",inplace=True)
 
 
 ## Creation de l'app
+
 st.markdown("# Questions")
 st.markdown("## Voici le film le plus long du top 250 d'imdb")
 df= pd.DataFrame(list(db_movies.find().sort("duree",-1).limit(1)))
@@ -96,9 +95,18 @@ for genre in liste_genre:
     dict_temps_genre[genre] =  temps_total/nb_movies
 
 st.markdown(f"## La duree moyennne selon le genre ")
+fig, ax = plt.subplots()
+names = list(dict_temps_genre.keys())
+values = list(dict_temps_genre.values())
+ax.bar(range(len(dict_temps_genre)), values, tick_label=names)
+for tick in ax.get_xticklabels():
+    tick.set_rotation(90)
+st.pyplot(fig)
+
 duree_par_genre = st.selectbox(
     'Choisi un genre de film :',
     liste_genre,key="duree_par_genre")
 
 if st.button("valider le genre"):
     st.markdown(f"La duree moyennne des films du genre {duree_par_genre} est {round(dict_temps_genre[duree_par_genre],2)} min ")
+

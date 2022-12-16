@@ -2,7 +2,7 @@ import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from ..items import ImdbItem
-
+from .functions import convertion_duree
 
 class ImdbCrawlSpiderSpider(CrawlSpider):
     name = 'imdb_crawl_spider'
@@ -25,16 +25,17 @@ class ImdbCrawlSpiderSpider(CrawlSpider):
 
     def parse_item(self, response):
         item = ImdbItem()
-        item["titre"] = response.xpath("//h1/text()").extract()
-        item["titre_original"] = response.xpath("//div[@class='sc-dae4a1bc-0 gwBsXc']/text()").extract()
-        item["score"] = response.xpath("//span[@class='sc-7ab21ed2-1 jGRxWM']/text()").extract_first()
+        item["titre"] = ''.join(response.xpath("//h1/text()").extract())
+        item["titre_original"] = ''.join(response.xpath("//div[@class='sc-dae4a1bc-0 gwBsXc']/text()").extract()).replace("Original title: ",'')
+        item["score"] = round(float(response.xpath("//span[@class='sc-7ab21ed2-1 jGRxWM']/text()").extract_first()),2)
         item["genre"] = response.xpath("//a[@class='sc-16ede01-3 bYNgQ ipc-chip ipc-chip--on-baseAlt']/span/text()").extract()
-        item["date"] = response.css("div.sc-80d4314-2 > ul >li:first-child>a::text").extract()
-        item["duree"] = response.css("div.sc-80d4314-2 > ul >li:last-child::text").extract()
-        item["descriptions"] = response.xpath("/html/body/div[2]/main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/div[1]/p/span[3]/text()").extract()
+        item["date"] = int(''.join(response.css("div.sc-80d4314-2 > ul >li:first-child>a::text").extract()))
+        item["duree"] = convertion_duree(''.join(response.css("div.sc-80d4314-2 > ul >li:last-child::text").extract()).replace(",",''))
+        item["descriptions"] = ''.join(response.xpath("//div/div/p/span[@class='sc-16ede01-2 gXUyNh']/text()").extract())
         item["acteurs"] = response.xpath("/html/body/div[2]/main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/div[3]/ul/li[3]/div/ul/li/a/text()").extract()
-        item["public"] = response.xpath("/html/body/div[2]/main/div/section[1]/section/div[3]/section/section/div[2]/div[1]/div/ul/li[2]/a/text()").extract()
+        item["public"] = ''.join(response.xpath("/html/body/div[2]/main/div/section[1]/section/div[3]/section/section/div[2]/div[1]/div/ul/li[2]/a/text()").extract())
         item["pays"] = response.xpath("//section/div/ul/li[@class = 'ipc-metadata-list__item'][1]/div[@class = 'ipc-metadata-list-item__content-container']/ul/li/a[@class = 'ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link']/text()").extract()
-        item["url"] = response.xpath("/html/body/div[2]/main/div/section[1]/section/div[3]/section/section/div/div/div/div[1]/div/div/img/@src").extract()
-        
+        item["url"] = ''.join(response.xpath("/html/body/div[2]/main/div/section[1]/section/div/section/section/div/div/div/div[1]/div/div/img/@src").extract())
+        item["langue"]= response.xpath("//section[@data-testid='Details']/div[@data-testid='title-details-section']/ul/li[@data-testid='title-details-languages']/div/ul/li/a/text()").extract()
+
         yield item

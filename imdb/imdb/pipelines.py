@@ -6,8 +6,15 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
-
+from pymongo import MongoClient
 
 class ImdbPipeline:
+
+    def __init__(self):
+        self.conn = MongoClient("localhost:27017")
+        db = self.conn.scrapyPipeline
+        self.movies = db.movies
+
     def process_item(self, item, spider):
+        self.movies.insert_one(dict(item))
         return item

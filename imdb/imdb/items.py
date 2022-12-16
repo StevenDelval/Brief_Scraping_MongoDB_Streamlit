@@ -21,3 +21,4 @@ class ImdbItem(scrapy.Item):
     genre = scrapy.Field()
     titre = scrapy.Field()
     url = scrapy.Field()
+    langue = scrapy.Field()
