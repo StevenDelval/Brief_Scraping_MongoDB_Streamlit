@@ -22,3 +22,7 @@ class ImdbItem(scrapy.Item):
     titre = scrapy.Field()
     url = scrapy.Field()
     langue = scrapy.Field()
+
+class ImdbSerieItem(ImdbItem):
+    episode = scrapy.Field()
+    nb_saison = scrapy.Field()
