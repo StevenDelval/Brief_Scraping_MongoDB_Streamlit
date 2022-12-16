@@ -174,31 +174,49 @@ with tab2:
 
     st.sidebar.markdown("# Recherche")
 
-    titre_selectbox = st.sidebar.selectbox(
+    titre_selectbox = st.sidebar.multiselect(
         'Choisi un titre de film :',
         liste_titre)
     titre_df= st.sidebar.checkbox('En dataframe',key="titre")
     if st.sidebar.button("Selectionner le titre"):
         if titre_df:
-            df= pd.DataFrame(list(db_movies.find({"titre":titre_selectbox})))
+            df= pd.DataFrame(list(db_movies.find({"titre":{"$in":titre_selectbox}})))
             df.drop(columns="_id",inplace=True)
             st.dataframe(df)
         else:
-            mise_en_forme(db_movies.find({"titre":titre_selectbox}))
+            mise_en_forme(db_movies.find({"titre":{"$in":titre_selectbox}}))
 
-    genre_selectbox = st.sidebar.selectbox(
+    genre_selectbox = st.sidebar.multiselect(
         'Choisi un genre de film :',
         liste_genre)
     genre_df= st.sidebar.checkbox('En dataframe',key="genre")
+    pour_le_meme_film= st.sidebar.checkbox('Les films avec exactement ces genres')
     if st.sidebar.button("Selectionner le genre"):
-        if genre_df:
-            df= pd.DataFrame(list(db_movies.find({"genre":genre_selectbox})))
-            df.drop(columns="_id",inplace=True)
-            st.markdown(f"### Voici les films avec pour genre {genre_selectbox} :")
-            st.dataframe(df)
+        if not pour_le_meme_film:
+            try : 
+                if genre_df:
+                    df= pd.DataFrame(list(db_movies.find({"genre":{"$in":genre_selectbox}})))
+                    df.drop(columns="_id",inplace=True)
+                    st.markdown(f"### Voici les films avec pour le ou les genre(s) {' , '.join(genre_selectbox)} :")
+                    st.dataframe(df)
+                else:
+                    st.markdown(f"### Voici les films avec pour le ou les genre(s) {' , '.join(genre_selectbox)} :")
+                    mise_en_forme(db_movies.find({"genre":{"$in":genre_selectbox}}))
+            except:
+                st.markdown(f"### Il n'y a pas de films avec les genres {' , '.join(genre_selectbox)} :")
         else:
-            st.markdown(f"### Voici les films avec pour genre {genre_selectbox} :")
-            mise_en_forme(db_movies.find({"genre":genre_selectbox}))
+            try :
+                if genre_df:
+                    df= pd.DataFrame(list(db_movies.find({"genre":{"$all":genre_selectbox}})))
+                    df.drop(columns="_id",inplace=True)
+                    st.markdown(f"### Voici les films avec pour le ou les genres {' , '.join(genre_selectbox)} :")
+                    st.dataframe(df)
+                else:
+                    st.markdown(f"### Voici les films avec pour le ou les genre(s) {' , '.join(genre_selectbox)} :")
+                    mise_en_forme(db_movies.find({"genre":{"$all":genre_selectbox}}))
+            except:
+                st.markdown(f"### Il n'y a pas de films avec les genre(s) {' , '.join(genre_selectbox)} :")
+        
         
 
 
@@ -252,8 +270,8 @@ with tab2:
         except:
             st.markdown(f"### Il n'y a pas de film dont la note est superieur à {sup_note} et inferieur à {inf_note} :")
 
-    sup_duree = st.sidebar.slider('Selectionner une note superieur à:',value=0,max_value=1000,min_value=0,step=1,key="sup_duree")
-    inf_duree = st.sidebar.slider('Selectionner une note inferieur à:',value=1000,max_value=1000,min_value=0,step=1,key="inf_duree")
+    sup_duree = st.sidebar.slider('Selectionner une duree superieur à:',value=0,max_value=300,min_value=0,step=1,key="sup_duree")
+    inf_duree = st.sidebar.slider('Selectionner une duree inferieur à:',value=300,max_value=300,min_value=0,step=1,key="inf_duree")
     duree_df= st.sidebar.checkbox('En dataframe',key="duree")
     if st.sidebar.button("Selectionner par duree"):
         try:
@@ -267,3 +285,6 @@ with tab2:
                 mise_en_forme(db_movies.find({"duree":{"$gte":sup_duree,"$lte":inf_duree}}))
         except:
             st.markdown(f"### Il n'y a pas de film dont la duree est superieur à {sup_duree} et inferieur à {inf_duree} min")
+    
+
+    

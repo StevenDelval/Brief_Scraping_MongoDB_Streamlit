@@ -1,7 +1,7 @@
 import re
-def convertion_duree(s):
+def convertion_duree(str):
     
-    split_cell = re.split("\s", s)
+    split_cell = re.split("\s", str)
     duree = 0
     for elt in split_cell:
         if "h" in elt:
