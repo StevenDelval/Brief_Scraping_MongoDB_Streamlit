@@ -77,6 +77,8 @@ for movie in db_movies.find():
 
 
 ## Creation de l'app
+with open('style.css') as line:
+        st.markdown(f"<style>{line.read()}</style>", unsafe_allow_html=True)
 tab1,tab2 = st.tabs(["Question","Recherche"])
 
 with tab1:
@@ -169,10 +171,9 @@ with tab1:
 
 
 with tab2:
-    with open('style.css') as line:
-        st.markdown(f"<style>{line.read()}</style>", unsafe_allow_html=True)
+    
 
-    st.sidebar.markdown("# Recherche")
+    st.sidebar.markdown("<h1 style='color:#e52420;font-size:36px;'> Recherche</h1>",unsafe_allow_html=True)
 
     titre_selectbox = st.sidebar.multiselect(
         'Choisi un titre de film :',
