@@ -3,8 +3,18 @@
 }
 
 .css-hxt7ib.e1fqkh3o2{
-    background: #007461;
+    background: #1f1f1f;
 }
-.css-15tx938.effi0qh3, .css-1inwz65.e88czh80 ,.css-1djdyxw.ek41t0m0 ,.StyledThumbValue.css-10y5sf6.e88czh82{
+.css-15tx938.effi0qh3, .css-1inwz65.e88czh80 ,.css-1djdyxw.ek41t0m0 ,.StyledThumbValue.css-10y5sf6.e88czh82,.e1fb0mya1.css-fblp2m.ex0cdmw0{
     color: white;
 }
+.StyledThumbValue.css-10y5sf6.e88czh82,.css-demzbm.e88czh83{
+    color:#f5c518;
+}
+
+div.stSlider > div[data-baseweb = "slider"] > div > div {
+    background: #f5c518;
+    padding: 0  5px;
+    border-radius: 15px;
+    color: black;
+ }

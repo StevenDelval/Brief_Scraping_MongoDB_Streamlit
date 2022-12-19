@@ -173,7 +173,7 @@ with tab1:
 with tab2:
     
 
-    st.sidebar.markdown("<h1 style='color:#e52420;font-size:36px;'> Recherche</h1>",unsafe_allow_html=True)
+    st.sidebar.markdown("<h1 style='color:#f5c518;font-size:36px;'> Recherche</h1>",unsafe_allow_html=True)
 
     titre_selectbox = st.sidebar.multiselect(
         'Choisi un titre de film :',
